@@ -1,0 +1,42 @@
+.home-page-bottom-container {
+    display: grid;
+    /* Reduced min width so 2 cards can fit down to ~320px screens */
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 2.5rem;
+    align-items: stretch;
+    flex: 1;
+    width: 100%;
+    padding: 4rem 3.5rem;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+/* Small devices (phones) */
+@media (max-width: 640px) {
+
+    .home-page-bottom-container {
+        padding: 1.5rem 1rem;
+        gap: 1rem;
+    }
+}
+
+/* Medium devices (tablets) */
+@media (min-width: 641px) and (max-width: 820px) {
+
+
+    .home-page-bottom-container {
+        padding: 3rem 2.5rem;
+        gap: 2rem;
+    }
+}
+
+/* Large devices (laptops & desktops) */
+@media (min-width: 821px) {}
+
+@media (min-width: 1280px) {
+
+
+    .home-page-bottom-container {
+        padding: 3rem 2.5rem;
+        gap: 2rem;
+    }
+}
