@@ -1,29 +1,9 @@
 import './App.css'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { lazy, Suspense } from 'react'
+import { Suspense } from 'react'
 import LoadingPage from './pages/loading page'
 import HomeBottomContainer from './pages/home page bottom container'
 import BookingPage from './pages/booking page'
-
-const homeBottomContainer = lazy(() => {
-  return (
-    () => {
-      return (
-        <HomeBottomContainer />
-      )
-    }
-  )
-})
-
-const bookingPage = lazy(() => {
-  return (
-    () => {
-      return (
-        <BookingPage />
-      )
-    }
-  )
-})
 
 const App = () => {
   return (

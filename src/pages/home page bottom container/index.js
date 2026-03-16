@@ -1,4 +1,4 @@
-﻿import './index.css'
+import './index.css'
 import HomePageFeature from '../../components/homepage feature'
 import { useNavigate } from 'react-router-dom'
 
