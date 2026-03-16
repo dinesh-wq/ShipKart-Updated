@@ -30,7 +30,7 @@ const App = () => {
               <h1 className="shipkart-card-heading">Welcome to <span className="shipkart-card-heading-span">ShipKart</span></h1>
               <p className="shipkart-card-description">Fast and Reliable Delivery Services</p>
             </div>
-            <img src="shipkart delivery image.png" alt="shipkart delivery image" className="shipkart-card-delivery-image" />
+            <img src="shipkart delivery image.png" alt="shipkart delivery" className="shipkart-card-delivery-image" />
           </div>
         </div>
         <div className="home-page-bottom-container">
