@@ -104,7 +104,7 @@ const BookingPage = () => {
     const scheduleDelivery = async (e) => {
         try {
             e.preventDefault()
-            const response = await fetch('http://localhost:5432/orders', {
+            const response = await fetch('https://shipkart-updated-backend-1.onrender.com/orders', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
