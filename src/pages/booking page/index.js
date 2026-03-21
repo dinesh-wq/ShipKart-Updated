@@ -59,7 +59,6 @@ const BookingPage = () => {
                 [err]: ''
             }))
         }
-        console.log({ [name]: value, [err]: value })
     }
 
     const updateDeliveryDetails = (e) => {
@@ -102,6 +101,39 @@ const BookingPage = () => {
         }
     }
 
+    const scheduleDelivery = async (e) => {
+        try {
+            e.preventDefault()
+            const response = await fetch('http://localhost:5432/orders', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    user_id: "64bd9e69-c4d6-43ff-a4fc-fd13d27a79b3",
+                    pickup_address: pickupDetails.pickupAddress,
+                    pickup_pincode: pickupDetails.pickupPincode,
+                    pickup_landmark: pickupDetails.landmark,
+                    pickup_date_time: new Date(pickupDetails.pickupDateTime).toISOString(),
+                    user_phone_number: pickupDetails.phoneNumber,
+                    receiver_address: deliveryDetails.deliveryAddress,
+                    receiver_pincode: deliveryDetails.deliveryPincode,
+                    receiver_landmark: deliveryDetails.landmark,
+                    receiver_phone_number: deliveryDetails.receiverPhoneNumber,
+                    item_name: itemDetails.itemName,
+                    item_weight: Number(itemDetails.itemWeight),
+                    item_condition: itemDetails.itemCondition,
+                    delivery_agent_name: "Dinesh",
+                    delivery_agent_phone_number: "9876543210",
+                    delivery_status: "pending"
+                })
+            })
+            const data = await response.json()
+            console.log(data)
+        } catch (error) {
+            console.log(`Error in scheduleDelivery: ${error.message}`)
+        }
+    }
 
 
     return (
@@ -117,13 +149,13 @@ const BookingPage = () => {
                         <form className="booking-page-form">
                             <input type="text" placeholder="Pickup Address" className="booking-page-form-input" name='pickupAddress' value={pickupDetails.pickupAddress} err="pickupAddressError" onChange={updatePickupDetails} />
                             <p className="error-message">{pickupDetailsErrors.pickupAddressError}</p>
-                            <input type="number" maxLength={6} pattern='[0-9]{6}' placeholder="Pickup Pincode" name="pickupPincode" value={pickupDetails.pickupPincode} err="pickupPincodeError" className="booking-page-form-input" onChange={updatePickupDetails} />
+                            <input type="text" maxLength={6} pattern='[0-9]{6}' placeholder="Pickup Pincode" name="pickupPincode" value={pickupDetails.pickupPincode} err="pickupPincodeError" className="booking-page-form-input" onChange={updatePickupDetails} />
                             <p className="error-message">{pickupDetailsErrors.pickupPincodeError}</p>
                             <input type="text" placeholder="Landmark" className="booking-page-form-input" name="landmark" value={pickupDetails.landmark} err="landmarkError" onChange={updatePickupDetails} />
                             <p className="error-message">{pickupDetailsErrors.landmarkError}</p>
                             <input type="datetime-local" placeholder="Pickup Date&Time" className="booking-page-form-input" name="pickupDateTime" value={pickupDetails.pickupDateTime} err="pickupDateTimeError" onChange={updatePickupDetails} />
                             <p className="error-message">{pickupDetailsErrors.pickupDateTimeError}</p>
-                            <input type="" maxLength={10} pattern='[0-9]{10}' placeholder="Phone Number" className="booking-page-form-input" name="phoneNumber" value={pickupDetails.phoneNumber} err="phoneNumberError" onChange={updatePickupDetails} />
+                            <input type="text" maxLength={10} pattern='[0-9]{10}' placeholder="Phone Number" className="booking-page-form-input" name="phoneNumber" value={pickupDetails.phoneNumber} err="phoneNumberError" onChange={updatePickupDetails} />
                             <p className="error-message">{pickupDetailsErrors.phoneNumberError}</p>
                         </form>
                     </div>
@@ -132,11 +164,11 @@ const BookingPage = () => {
                             <form className="booking-page-form">
                                 <input type="text" placeholder="Delivery Address" name="deliveryAddress" value={deliveryDetails.deliveryAddress} err="deliveryAddressError" className="booking-page-form-input" onChange={updateDeliveryDetails} />
                                 <p className="error-message">{deliveryDetailsErrors.deliveryAddressError}</p>
-                                <input type="number" minLength={6} maxLength={6} placeholder="Delivery Pincode" name="deliveryPincode" value={deliveryDetails.deliveryPincode} err="deliveryPincodeError" className="booking-page-form-input" onChange={updateDeliveryDetails} />
+                                <input type="text" minLength={6} maxLength={6} placeholder="Delivery Pincode" name="deliveryPincode" value={deliveryDetails.deliveryPincode} err="deliveryPincodeError" className="booking-page-form-input" onChange={updateDeliveryDetails} />
                                 <p className="error-message">{deliveryDetailsErrors.deliveryPincodeError}</p>
                                 <input type="text" placeholder="Landmark" name="landmark" value={deliveryDetails.landmark} err="landmarkError" className="booking-page-form-input" onChange={updateDeliveryDetails} />
                                 <p className="error-message">{deliveryDetailsErrors.landmarkError}</p>
-                                <input type="tel" minLength={10} maxLength={10} placeholder="Receiver's Phone Number" name="receiverPhoneNumber" value={deliveryDetails.receiverPhoneNumber} err="receiverPhoneNumberError" className="booking-page-form-input" onChange={updateDeliveryDetails} />
+                                <input type="text" minLength={10} maxLength={10} placeholder="Receiver's Phone Number" name="receiverPhoneNumber" value={deliveryDetails.receiverPhoneNumber} err="receiverPhoneNumberError" className="booking-page-form-input" onChange={updateDeliveryDetails} />
                                 <p className="error-message">{deliveryDetailsErrors.receiverPhoneNumberError}</p>
                             </form>
                             <form className="booking-page-form">
@@ -151,7 +183,7 @@ const BookingPage = () => {
                                 </select>
                             </form>
                         </div>
-                        <button className="schedule-button">Schedule Delivery</button>
+                        <button className="schedule-button" onClick={scheduleDelivery}>Schedule Delivery</button>
                     </div>
                 </div>
             </div>
