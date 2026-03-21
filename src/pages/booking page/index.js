@@ -102,8 +102,19 @@ const BookingPage = () => {
     }
 
     const scheduleDelivery = async (e) => {
+        e.preventDefault()
+        const { pickupAddress, pickupPincode, landmark: pickupLandmark, pickupDateTime, phoneNumber } = pickupDetails
+        const { deliveryAddress, deliveryPincode, landmark: deliveryLandmark, receiverPhoneNumber } = deliveryDetails
+        const { itemName, itemWeight, itemCondition } = itemDetails
+
+        if (pickupAddress === "" || pickupPincode === "" || pickupLandmark === "" || pickupDateTime === "" || phoneNumber === "" ||
+            deliveryAddress === "" || deliveryPincode === "" || deliveryLandmark === "" || receiverPhoneNumber === "" ||
+            itemName === "" || itemWeight === "" || itemCondition === "") {
+            alert("Please fill all the details")
+            return
+        }
+
         try {
-            e.preventDefault()
             const response = await fetch('https://shipkart-updated-backend-1.onrender.com/orders', {
                 method: 'POST',
                 headers: {
@@ -130,6 +141,7 @@ const BookingPage = () => {
             })
             const data = await response.json()
             console.log(data)
+            alert("Order Scheduled Successfully")
             setPickupDetails({
                 pickupAddress: '',
                 pickupPincode: '',
@@ -147,6 +159,24 @@ const BookingPage = () => {
                 itemName: '',
                 itemWeight: '',
                 itemCondition: ''
+            })
+            setPickupDetailsErrors({
+                pickupAddressError: '',
+                pickupPincodeError: '',
+                landmarkError: '',
+                pickupDateTimeError: '',
+                phoneNumberError: ''
+            })
+            setDeliveryDetailsErrors({
+                deliveryAddressError: '',
+                deliveryPincodeError: '',
+                landmarkError: '',
+                receiverPhoneNumberError: ''
+            })
+            setItemDetailsErrors({
+                itemNameError: '',
+                itemWeightError: '',
+                itemConditionError: ''
             })
         } catch (error) {
             console.log(`Error in scheduleDelivery: ${error.message}`)
