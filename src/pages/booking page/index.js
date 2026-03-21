@@ -130,6 +130,24 @@ const BookingPage = () => {
             })
             const data = await response.json()
             console.log(data)
+            setPickupDetails({
+                pickupAddress: '',
+                pickupPincode: '',
+                landmark: '',
+                pickupDateTime: '',
+                phoneNumber: ''
+            })
+            setDeliveryDetails({
+                deliveryAddress: '',
+                deliveryPincode: '',
+                landmark: '',
+                receiverPhoneNumber: ''
+            })
+            setItemDetails({
+                itemName: '',
+                itemWeight: '',
+                itemCondition: ''
+            })
         } catch (error) {
             console.log(`Error in scheduleDelivery: ${error.message}`)
         }
