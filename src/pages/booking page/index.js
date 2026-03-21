@@ -115,36 +115,36 @@ const BookingPage = () => {
                     <div className="booking-page-form-container">
                         <h2 className="booking-page-form-heading">Pickup Details</h2>
                         <form className="booking-page-form">
-                            <input type="text" placeholder="Pickup Address" className="booking-page-form-input" name='pickupAddress' err="pickupAddressError" onChange={updatePickupDetails} />
+                            <input type="text" placeholder="Pickup Address" className="booking-page-form-input" name='pickupAddress' value={pickupDetails.pickupAddress} err="pickupAddressError" onChange={updatePickupDetails} />
                             <p className="error-message">{pickupDetailsErrors.pickupAddressError}</p>
-                            <input type="number" maxLength={6} pattern='[0-9]{6}' placeholder="Pickup Pincode" name="pickupPincode" err="pickupPincodeError" className="booking-page-form-input" onChange={updatePickupDetails} />
+                            <input type="number" maxLength={6} pattern='[0-9]{6}' placeholder="Pickup Pincode" name="pickupPincode" value={pickupDetails.pickupPincode} err="pickupPincodeError" className="booking-page-form-input" onChange={updatePickupDetails} />
                             <p className="error-message">{pickupDetailsErrors.pickupPincodeError}</p>
-                            <input type="text" placeholder="Landmark" className="booking-page-form-input" name="landmark" err="landmarkError" onChange={updatePickupDetails} />
+                            <input type="text" placeholder="Landmark" className="booking-page-form-input" name="landmark" value={pickupDetails.landmark} err="landmarkError" onChange={updatePickupDetails} />
                             <p className="error-message">{pickupDetailsErrors.landmarkError}</p>
-                            <input type="datetime-local" placeholder="Pickup Date&Time" className="booking-page-form-input" name="pickupDateTime" err="pickupDateTimeError" onChange={updatePickupDetails} />
+                            <input type="datetime-local" placeholder="Pickup Date&Time" className="booking-page-form-input" name="pickupDateTime" value={pickupDetails.pickupDateTime} err="pickupDateTimeError" onChange={updatePickupDetails} />
                             <p className="error-message">{pickupDetailsErrors.pickupDateTimeError}</p>
-                            <input type="" maxLength={10} pattern='[0-9]{10}' placeholder="Phone Number" className="booking-page-form-input" name="phoneNumber" err="phoneNumberError" onChange={updatePickupDetails} />
+                            <input type="" maxLength={10} pattern='[0-9]{10}' placeholder="Phone Number" className="booking-page-form-input" name="phoneNumber" value={pickupDetails.phoneNumber} err="phoneNumberError" onChange={updatePickupDetails} />
                             <p className="error-message">{pickupDetailsErrors.phoneNumberError}</p>
                         </form>
                     </div>
                     <div className="delivery-schedule-container">
                         <div className="delivery-schedule-forms-container">
                             <form className="booking-page-form">
-                                <input type="text" placeholder="Delivery Address" name="deliveryAddress" err="deliveryAddressError" className="booking-page-form-input" onChange={updateDeliveryDetails} />
+                                <input type="text" placeholder="Delivery Address" name="deliveryAddress" value={deliveryDetails.deliveryAddress} err="deliveryAddressError" className="booking-page-form-input" onChange={updateDeliveryDetails} />
                                 <p className="error-message">{deliveryDetailsErrors.deliveryAddressError}</p>
-                                <input type="number" minLength={6} maxLength={6} placeholder="Delivery Pincode" name="deliveryPincode" err="deliveryPincodeError" className="booking-page-form-input" onChange={updateDeliveryDetails} />
+                                <input type="number" minLength={6} maxLength={6} placeholder="Delivery Pincode" name="deliveryPincode" value={deliveryDetails.deliveryPincode} err="deliveryPincodeError" className="booking-page-form-input" onChange={updateDeliveryDetails} />
                                 <p className="error-message">{deliveryDetailsErrors.deliveryPincodeError}</p>
-                                <input type="text" placeholder="Landmark" name="landmark" err="landmarkError" className="booking-page-form-input" onChange={updateDeliveryDetails} />
+                                <input type="text" placeholder="Landmark" name="landmark" value={deliveryDetails.landmark} err="landmarkError" className="booking-page-form-input" onChange={updateDeliveryDetails} />
                                 <p className="error-message">{deliveryDetailsErrors.landmarkError}</p>
-                                <input type="tel" minLength={10} maxLength={10} placeholder="Receiver's Phone Number" name="receiverPhoneNumber" err="receiverPhoneNumberError" className="booking-page-form-input" onChange={updateDeliveryDetails} />
+                                <input type="tel" minLength={10} maxLength={10} placeholder="Receiver's Phone Number" name="receiverPhoneNumber" value={deliveryDetails.receiverPhoneNumber} err="receiverPhoneNumberError" className="booking-page-form-input" onChange={updateDeliveryDetails} />
                                 <p className="error-message">{deliveryDetailsErrors.receiverPhoneNumberError}</p>
                             </form>
                             <form className="booking-page-form">
-                                <input type="text" placeholder="Item Name" name="itemName" err="itemNameError" className="booking-page-form-input" onChange={updateItemDetails} />
+                                <input type="text" placeholder="Item Name" name="itemName" value={itemDetails.itemName} err="itemNameError" className="booking-page-form-input" onChange={updateItemDetails} />
                                 <p className="error-message">{itemDetailsErrors.itemNameError}</p>
-                                <input type="number" minLength={1} maxLength={3} placeholder="Item Weight" name="itemWeight" err="itemWeightError" className="booking-page-form-input" onChange={updateItemDetails} />
+                                <input type="number" minLength={1} maxLength={3} placeholder="Item Weight" name="itemWeight" value={itemDetails.itemWeight} err="itemWeightError" className="booking-page-form-input" onChange={updateItemDetails} />
                                 <p className="error-message">{itemDetailsErrors.itemWeightError}</p>
-                                <select name="itemCondition" err="itemConditionError" className="booking-page-form-input" onChange={updateItemDetails}>
+                                <select name="itemCondition" value={itemDetails.itemCondition} err="itemConditionError" className="booking-page-form-input" onChange={updateItemDetails}>
                                     <option value="good">Good</option>
                                     <option value="moderate">Moderate</option>
                                     <option value="poor">Poor</option>
