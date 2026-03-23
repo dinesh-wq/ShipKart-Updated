@@ -1,6 +1,6 @@
 import './index.css'
 import { useNavigate } from 'react-router-dom'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 const BookingPage = () => {
     const navigate = useNavigate()
@@ -115,73 +115,77 @@ const BookingPage = () => {
         }
 
         try {
-            useEffect(() => {
-                const response = fetch('https://shipkart-updated-backend-1.onrender.com/orders', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        user_id: "64bd9e69-c4d6-43ff-a4fc-fd13d27a79b3",
-                        pickup_address: pickupDetails.pickupAddress,
-                        pickup_pincode: pickupDetails.pickupPincode,
-                        pickup_landmark: pickupDetails.landmark,
-                        pickup_date_time: new Date(pickupDetails.pickupDateTime).toISOString(),
-                        user_phone_number: pickupDetails.phoneNumber,
-                        receiver_address: deliveryDetails.deliveryAddress,
-                        receiver_pincode: deliveryDetails.deliveryPincode,
-                        receiver_landmark: deliveryDetails.landmark,
-                        receiver_phone_number: deliveryDetails.receiverPhoneNumber,
-                        item_name: itemDetails.itemName,
-                        item_weight: Number(itemDetails.itemWeight),
-                        item_condition: itemDetails.itemCondition,
-                        delivery_agent_name: "Dinesh",
-                        delivery_agent_phone_number: "9876543210",
-                        delivery_status: "Delivery Agent on the way to pick the order"
-                    })
+            const response = await fetch('https://shipkart-updated-backend-1.onrender.com/orders', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    user_id: "64bd9e69-c4d6-43ff-a4fc-fd13d27a79b3",
+                    pickup_address: pickupDetails.pickupAddress,
+                    pickup_pincode: pickupDetails.pickupPincode,
+                    pickup_landmark: pickupDetails.landmark,
+                    pickup_date_time: new Date(pickupDetails.pickupDateTime).toISOString(),
+                    user_phone_number: pickupDetails.phoneNumber,
+                    receiver_address: deliveryDetails.deliveryAddress,
+                    receiver_pincode: deliveryDetails.deliveryPincode,
+                    receiver_landmark: deliveryDetails.landmark,
+                    receiver_phone_number: deliveryDetails.receiverPhoneNumber,
+                    item_name: itemDetails.itemName,
+                    item_weight: Number(itemDetails.itemWeight),
+                    item_condition: itemDetails.itemCondition,
+                    delivery_agent_name: "Dinesh",
+                    delivery_agent_phone_number: "9876543210",
+                    delivery_status: "Delivery Agent on the way to pick the order"
                 })
-                const data = response.json()
-                console.log(data)
-                alert("Order Scheduled Successfully")
-                setPickupDetails({
-                    pickupAddress: '',
-                    pickupPincode: '',
-                    landmark: '',
-                    pickupDateTime: '',
-                    phoneNumber: ''
-                })
-                setDeliveryDetails({
-                    deliveryAddress: '',
-                    deliveryPincode: '',
-                    landmark: '',
-                    receiverPhoneNumber: ''
-                })
-                setItemDetails({
-                    itemName: '',
-                    itemWeight: '',
-                    itemCondition: ''
-                })
-                setPickupDetailsErrors({
-                    pickupAddressError: '',
-                    pickupPincodeError: '',
-                    landmarkError: '',
-                    pickupDateTimeError: '',
-                    phoneNumberError: ''
-                })
-                setDeliveryDetailsErrors({
-                    deliveryAddressError: '',
-                    deliveryPincodeError: '',
-                    landmarkError: '',
-                    receiverPhoneNumberError: ''
-                })
-                setItemDetailsErrors({
-                    itemNameError: '',
-                    itemWeightError: '',
-                    itemConditionError: ''
-                })
-            }, [])
+            })
+
+            if (!response.ok) {
+                throw new Error(`Failed to schedule delivery: ${response.statusText}`);
+            }
+
+            const data = await response.json()
+            console.log(data)
+            alert("Order Scheduled Successfully")
+            setPickupDetails({
+                pickupAddress: '',
+                pickupPincode: '',
+                landmark: '',
+                pickupDateTime: '',
+                phoneNumber: ''
+            })
+            setDeliveryDetails({
+                deliveryAddress: '',
+                deliveryPincode: '',
+                landmark: '',
+                receiverPhoneNumber: ''
+            })
+            setItemDetails({
+                itemName: '',
+                itemWeight: '',
+                itemCondition: ''
+            })
+            setPickupDetailsErrors({
+                pickupAddressError: '',
+                pickupPincodeError: '',
+                landmarkError: '',
+                pickupDateTimeError: '',
+                phoneNumberError: ''
+            })
+            setDeliveryDetailsErrors({
+                deliveryAddressError: '',
+                deliveryPincodeError: '',
+                landmarkError: '',
+                receiverPhoneNumberError: ''
+            })
+            setItemDetailsErrors({
+                itemNameError: '',
+                itemWeightError: '',
+                itemConditionError: ''
+            })
         } catch (error) {
             console.log(`Error in scheduleDelivery: ${error.message}`)
+            alert("Something went wrong. Please try again.")
         }
     }
 
