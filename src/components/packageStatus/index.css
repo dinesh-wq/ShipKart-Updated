@@ -82,26 +82,42 @@
     font-size: 0.9375rem;
 }
 
-/* Labels for better readability on mobile or when data is dense */
-.package-status-header p::before {
-    content: " ";
+.package-status-item-label {
     display: none;
-    font-size: 0.7rem;
-    color: #9ca3af;
+    /* Hidden by default on desktop */
+    font-weight: 700;
+    color: #6b7280;
     text-transform: uppercase;
-    font-weight: 600;
-    margin-bottom: 0.25rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+    margin-right: 0.5rem;
 }
 
 @media (max-width: 1024px) {
     .package-status-header {
         grid-template-columns: 1fr 1fr 1fr;
-        gap: 1rem;
+        gap: 1.5rem;
     }
 
     .package-status-button {
         grid-column: span 3;
         margin-top: 0.5rem;
+    }
+
+    .package-status-item-label {
+        display: block;
+        /* Show labels on mobile/tablet */
+        font-weight: 600;
+        color: #111827 !important;
+        font-size: 1.125rem !important;
+        margin-bottom: 0.25rem;
+    }
+
+    .package-status-header p {
+        background-color: #f8fafc;
+        padding: 0.75rem;
+        border-radius: 8px;
+        border: 1px solid #f1f5f9;
     }
 }
 
@@ -110,37 +126,11 @@
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        gap: 0.75rem;
+        gap: 1rem;
     }
 
     .package-status-header p {
         width: 100%;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .package-status-header p::before {
-        display: block;
-    }
-
-    .package-status-item-name::before {
-        content: "Item Name";
-    }
-
-    .package-status-item-weight::before {
-        content: "Weight";
-    }
-
-    .package-status-item-condition::before {
-        content: "Condition";
-    }
-
-    .package-status-delivery-agent-name::before {
-        content: "Agent";
-    }
-
-    .package-status-delivery-agent-phone-number::before {
-        content: "Contact";
     }
 
     .package-status-button {

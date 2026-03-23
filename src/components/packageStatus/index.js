@@ -12,11 +12,11 @@ const PackageStatus = (props) => {
     return (
         <div className="package-status-container">
             <div className="package-status-header">
-                <p className="package-status-item-name">{item_name}</p>
-                <p className="package-status-item-weight">{item_weight}</p>
-                <p className="package-status-item-condition">{item_condition}</p>
-                <p className="package-status-delivery-agent-name">{delivery_agent_name}</p>
-                <p className="package-status-delivery-agent-phone-number">{delivery_agent_phone_number}</p>
+                <p className="package-status-item-name"><span className="package-status-item-label">Item Name:</span> {item_name}</p>
+                <p className="package-status-item-weight"><span className="package-status-item-label">Item weight:</span> {item_weight}</p>
+                <p className="package-status-item-condition"><span className="package-status-item-label">Item condition:</span> {item_condition}</p>
+                <p className="package-status-delivery-agent-name"><span className="package-status-item-label">Delivery agent name:</span> {delivery_agent_name}</p>
+                <p className="package-status-delivery-agent-phone-number"><span className="package-status-item-label">Delivery agent phone number:</span> {delivery_agent_phone_number}</p>
                 <button className="package-status-button" onClick={() => setIsDeliveryStatusDisplaying(!isDeliveryStatusDisplaying)}>
                     {isDeliveryStatusDisplaying ? 'Hide Delivery Status' : 'Show Delivery Status'}
                 </button>
