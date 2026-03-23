@@ -4,6 +4,7 @@ import { Suspense } from 'react'
 import LoadingPage from './pages/loading page'
 import HomeBottomContainer from './pages/home page bottom container'
 import BookingPage from './pages/booking page'
+import TrackingPage from './pages/tracking page'
 
 const App = () => {
   return (
@@ -27,6 +28,7 @@ const App = () => {
             <Routes>
               <Route path="/" element={<HomeBottomContainer />} />
               <Route path="/booking" element={<BookingPage />} />
+              <Route path="/tracking" element={<TrackingPage />} />
             </Routes>
           </Suspense>
         </div>

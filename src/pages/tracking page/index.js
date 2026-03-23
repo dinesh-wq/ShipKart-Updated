@@ -1,0 +1,54 @@
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import './index.css'
+import PackageStatus from '../../components/packageStatus'
+
+const TrackingPage = () => {
+    const navigate = useNavigate()
+    const [allPackagesDetails, setAllPackagesDetails] = useState([])
+    const [error, setError] = useState(null)
+
+    useEffect(() => {
+        const getPackagesDetails = async () => {
+            try {
+                const response = await fetch('https://shipkart-updated-backend-1.onrender.com/orders', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`)
+                }
+                const data = await response.json()
+                setAllPackagesDetails(data)
+            } catch (error) {
+                setError(error.message)
+            }
+        }
+
+        getPackagesDetails()
+    }, [])
+
+    return (
+        <div className='tracking-page-container'>
+            <div className="tracking-page-header-container">
+                <h1 className="tracking-page-heading">Tracking Page</h1>
+                <button className="back-button" onClick={() => navigate('/')}>Back</button>
+            </div>
+            <div className='tracking-page-packages-header-container'>
+                <h1 className='tracking-page-packages-header-item-name'>Item Name</h1>
+                <h1 className='tracking-page-packages-header-item-weight'>Item Weight</h1>
+                <h1 className='tracking-page-packages-header-item-condition'>Item Condition</h1>
+                <h1 className='tracking-page-packages-header-delivery-agent-name'>Delivery Agent Name</h1>
+                <h1 className='tracking-page-packages-header-delivery-agent-phone-number'>Delivery Agent Phone Number</h1>
+            </div>
+            {error && <p className='error-message'>Error: {error}</p>}
+            {allPackagesDetails.map(eachPackage => (
+                <PackageStatus key={eachPackage.id} itemDetails={eachPackage} />
+            ))}
+        </div>
+    )
+}
+
+export default TrackingPage
