@@ -11,7 +11,7 @@ const homePageFeaturesData = [
     {
         heading: "Delivery Price Calculator",
         image: "delivery price caluculator image.png",
-        destination: "priceCalculator"
+        destination: "deliveryPriceCalculator"
     },
     {
         heading: "Book a Delivery",

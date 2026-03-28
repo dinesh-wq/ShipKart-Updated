@@ -1,10 +1,13 @@
 import './App.css'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { Suspense } from 'react'
+import { Suspense, lazy } from 'react'
 import LoadingPage from './pages/loading page'
 import HomeBottomContainer from './pages/home page bottom container'
-import BookingPage from './pages/booking page'
-import TrackingPage from './pages/tracking page'
+
+const BookingPage = lazy(() => import('./pages/booking page'))
+const TrackingPage = lazy(() => import('./pages/tracking page'))
+const DeliveryPriceCalculatorPage = lazy(() => import('./pages/Delivery Price Calculator page'))
+const DeliveryAgentPage = lazy(() => import('./pages/Delivery Agent page'))
 
 const App = () => {
   return (
@@ -29,6 +32,8 @@ const App = () => {
               <Route path="/" element={<HomeBottomContainer />} />
               <Route path="/booking" element={<BookingPage />} />
               <Route path="/tracking" element={<TrackingPage />} />
+              <Route path="/deliveryPriceCalculator" element={<DeliveryPriceCalculatorPage />} />
+              <Route path="/deliveryAgentPage" element={<DeliveryAgentPage />} />
             </Routes>
           </Suspense>
         </div>
