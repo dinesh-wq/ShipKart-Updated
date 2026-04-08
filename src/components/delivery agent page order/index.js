@@ -79,7 +79,7 @@ const DeliveryAgentOrder = (props) => {
                 {isStatusDisplaying && (
                     <div className="status-update-container">
                         <select onChange={updateStatus} value={status}>
-                            <option value={delivery_status} selected disabled>{delivery_status}</option>
+                            <option value={delivery_status} disabled>{delivery_status}</option>
                             <option value="Delivery Agent has to collect">Delivery Agent has to collect</option>
                             <option value="On the way to customer">On the way to customer</option>
                             <option value="Out For Delivery">Out For Delivery</option>

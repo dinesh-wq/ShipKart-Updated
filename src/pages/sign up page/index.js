@@ -1,9 +1,10 @@
 import './index.css'
 import { useState, useContext } from 'react'
+import { Link } from 'react-router-dom'
 import { JwtTokenContext } from '../../App'
 
 const SignUpPage = () => {
-    const { jwtToken, setJwtToken } = useContext(JwtTokenContext)
+    const { setJwtToken } = useContext(JwtTokenContext)
     const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -96,7 +97,7 @@ const SignUpPage = () => {
                 </form>
             </div>
             <div className="sign-up-page-footer">
-                <p>Already have an account? <a href="/">Login</a></p>
+                <p>Already have an account? <Link to="/">Login</Link></p>
             </div>
         </div>
     )

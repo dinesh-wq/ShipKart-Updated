@@ -2,7 +2,7 @@ import './index.css'
 
 const LoadingPage = () => {
     return (
-        <div class="loader"></div>
+        <div className="loader"></div>
     )
 }
 

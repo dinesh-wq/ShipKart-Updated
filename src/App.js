@@ -2,6 +2,7 @@ import './App.css'
 import Cookies from 'js-cookie'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { Suspense, lazy, useState, createContext } from 'react'
+import { jwtDecode } from 'jwt-decode'
 import LoadingPage from './pages/loading page'
 
 const BookingPage = lazy(() => import('./pages/booking page'))
@@ -17,11 +18,21 @@ export const JwtTokenContext = createContext()
 const App = () => {
   const [jwtToken, setJwtToken] = useState(Cookies.get('jwt_token'))
 
+  let username = 'Guest'
+  if (jwtToken) {
+    try {
+      const decoded = jwtDecode(jwtToken)
+      username = decoded.username || decoded.name || 'Guest'
+    } catch (error) {
+      console.error('Invalid token:', error)
+    }
+  }
+
   return (
     <JwtTokenContext.Provider value={{ jwtToken, setJwtToken }}>
       <BrowserRouter>
         <Suspense fallback={<LoadingPage />}>
-          {jwtToken === undefined ? (
+          {!jwtToken ? (
             <Routes>
               <Route path="/" element={<LoginPage />} />
               <Route path="/signUpPage" element={<SignUpPage />} />
@@ -33,7 +44,7 @@ const App = () => {
                 <div className="home-page-top-container shadow-sm">
                   <div className="home-page-profile-container">
                     <img src="ShipKart logo design.png" alt="website-logo" className="shipkart-logo" />
-                    <h1>Welcome Guest</h1>
+                    <h1>Welcome {username}</h1>
                   </div>
                   <div className="home-page-card-container">
                     <div className="home-page-card-data">
