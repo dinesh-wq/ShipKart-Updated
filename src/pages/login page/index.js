@@ -39,7 +39,7 @@ const LoginPage = () => {
             else if (Username !== '' && Password !== '') {
                 console.log('Username:', Username)
                 console.log('Password:', Password)
-                const response = await fetch('https://shipkart-updated-backend-1.onrender.com/orders/login', {
+                const response = await fetch('https://shipkart-updated-backend-1.onrender.com/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
