@@ -59,7 +59,7 @@ const LoginPage = () => {
 
 
         } catch (error) {
-            console.error('Login Error:', error)
+            console.log('Login Error:', error)
             alert(`Login Error: ${error.message}`)
         }
     }
