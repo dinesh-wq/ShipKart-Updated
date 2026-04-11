@@ -59,22 +59,31 @@ const SignUpPage = () => {
                     password: password,
                 }),
             })
+
+            const contentType = response.headers.get("content-type");
+            if (!response.ok || !contentType || !contentType.includes("application/json")) {
+                const errorText = await response.text();
+                console.error('Server error response:', errorText);
+                throw new Error(`Server returned ${response.status} ${response.statusText}${!contentType?.includes("application/json") ? '. Expected JSON but got HTML/Text. Please check if the backend URL and endpoint are correct.' : ''}`);
+            }
+
             const data = await response.json()
             console.log(data)
-            setUsername('')
-            setEmail('')
-            setPassword('')
-            setConfirmPassword('')
+            
             if (data.message === 'User Registered Successfully') {
+                setUsername('')
+                setEmail('')
+                setPassword('')
+                setConfirmPassword('')
                 setJwtToken(data.token)
-                alert({ message: data.message, login_token: data.token })
-            }
-            else {
                 alert(data.message)
             }
+            else {
+                alert(data.message || 'Registration failed')
+            }
         } catch (error) {
-            console.log(error)
-            alert(`signUpPage Error: ${error.message}`)
+            console.error('SignUp Error:', error)
+            alert(`SignUp Error: ${error.message}`)
         }
     }
 

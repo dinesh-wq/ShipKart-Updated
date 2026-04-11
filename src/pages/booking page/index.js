@@ -140,8 +140,11 @@ const BookingPage = () => {
                 })
             })
 
-            if (!response.ok) {
-                throw new Error(`Failed to schedule delivery: ${response.statusText}`);
+            const contentType = response.headers.get("content-type");
+            if (!response.ok || !contentType || !contentType.includes("application/json")) {
+                const errorText = await response.text();
+                console.error('Server error response:', errorText);
+                throw new Error(`Server returned ${response.status}. Expected JSON but got ${contentType || 'unknown'}.`);
             }
 
             const data = await response.json()

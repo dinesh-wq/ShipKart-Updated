@@ -29,31 +29,39 @@ const LoginPage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        if (Username === '') {
-            setUsernameError('Username is required')
+        try {
+            if (Username === '') {
+                setUsernameError('Username is required')
+            }
+            else if (Password === '') {
+                setPasswordError('Password is required')
+            }
+            else if (Username !== '' && Password !== '') {
+                console.log('Username:', Username)
+                console.log('Password:', Password)
+                const response = await fetch('https://shipkart-updated-backend-1.onrender.com/orders/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username: Username,
+                        password: Password,
+                    }),
+                })
+                const data = await response.json()
+                setUserName('')
+                setPassword('')
+                console.log(data)
+                alert(data.message)
+            }
+
+
+
+        } catch (error) {
+            console.error('Login Error:', error)
+            alert(`Login Error: ${error.message}`)
         }
-        if (Password === '') {
-            setPasswordError('Password is required')
-        }
-        if (Username !== '' && Password !== '') {
-            console.log('Username:', Username)
-            console.log('Password:', Password)
-        }
-        const response = await fetch('https://shipkart-updated-backend-1.onrender.com/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                username: Username,
-                password: Password,
-            }),
-        })
-        const data = await response.json()
-        setUserName('')
-        setPassword('')
-        console.log(data)
-        alert(data.message)
     }
     return (
         <div className='login-page-background-container'>
