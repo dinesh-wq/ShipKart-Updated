@@ -1,6 +1,8 @@
 import './index.css'
 import { Link } from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useContext } from 'react'
+import Cookies from 'js-cookie'
+import { JwtTokenContext } from '../../App'
 
 
 const LoginPage = () => {
@@ -8,6 +10,7 @@ const LoginPage = () => {
     const [Password, setPassword] = useState('')
     const [UsernameError, setUsernameError] = useState('')
     const [PasswordError, setPasswordError] = useState('')
+    const { setJwtToken } = useContext(JwtTokenContext)
 
     const handleUsernameChange = (e) => {
         setUserName(e.target.value)
@@ -53,7 +56,14 @@ const LoginPage = () => {
                 setUserName('')
                 setPassword('')
                 console.log(data)
-                alert(data.message)
+                if (data.message === 'Login Successful') {
+                    Cookies.set('jwt_token', data.jwt_token, { expires: 7 })
+                    setJwtToken(data.jwt_token)
+                    alert(`${data.message} and token is ${Cookies.get('jwt_token')}`)
+                }
+                else {
+                    alert(data.message)
+                }
             }
 
 
