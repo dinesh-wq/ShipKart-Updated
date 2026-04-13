@@ -2,16 +2,21 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './index.css'
 import PackageStatus from '../../components/packageStatus'
+import { JwtTokenContext } from '../../App'
+import { jwtDecode } from 'jwt-decode'
 
 const TrackingPage = () => {
     const navigate = useNavigate()
+    const { jwtToken } = useContext(JwtTokenContext)
+    const decodedToken = jwtDecode(jwtToken)
+    const user_id = decodedToken.user_id
     const [allPackagesDetails, setAllPackagesDetails] = useState([])
     const [error, setError] = useState(null)
 
     useEffect(() => {
         const getPackagesDetails = async () => {
             try {
-                const response = await fetch('https://shipkart-updated-backend-1.onrender.com/orders', {
+                const response = await fetch(`https://shipkart-updated-backend-1.onrender.com/orders/${user_id}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json'
