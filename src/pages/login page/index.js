@@ -11,6 +11,7 @@ const LoginPage = () => {
     const [UsernameError, setUsernameError] = useState('')
     const [PasswordError, setPasswordError] = useState('')
     const { setJwtToken } = useContext(JwtTokenContext)
+    const [formError, setFormError] = useState('')
 
     const handleUsernameChange = (e) => {
         setUserName(e.target.value)
@@ -32,6 +33,7 @@ const LoginPage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+        setFormError('')
         try {
             if (Username === '') {
                 setUsernameError('Username is required')
@@ -59,10 +61,9 @@ const LoginPage = () => {
                 if (data.message === 'Login Successful') {
                     Cookies.set('jwt_token', data.jwt_token, { expires: 7 })
                     setJwtToken(data.jwt_token)
-                    alert(`${data.message} and token is ${Cookies.get('jwt_token')}`)
                 }
                 else {
-                    alert(data.message)
+                    setFormError(data.message)
                 }
             }
 
@@ -70,7 +71,7 @@ const LoginPage = () => {
 
         } catch (error) {
             console.log('Login Error:', error)
-            alert(`Login Error: ${error.message}`)
+            setFormError(error.message)
         }
     }
     return (
@@ -80,6 +81,7 @@ const LoginPage = () => {
                     <h1>Login Page</h1>
                 </div>
                 <div className="login-page-form-container">
+                    {formError && <div className="form-error">{formError}</div>}
                     <form onSubmit={handleSubmit}>
                         <input type="text" placeholder="Username" value={Username} onChange={handleUsernameChange} />
                         <p className="error-message">{UsernameError}</p>

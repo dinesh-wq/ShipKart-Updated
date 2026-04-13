@@ -11,7 +11,7 @@ const SignUpPage = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
-    
+
     const [usernameError, setUsernameError] = useState('')
     const [emailError, setEmailError] = useState('')
     const [passwordError, setPasswordError] = useState('')
@@ -54,7 +54,7 @@ const SignUpPage = () => {
         } else {
             setPasswordError('')
         }
-        
+
         // Re-validate confirm password if it's already filled
         if (confirmPassword && val !== confirmPassword) {
             setConfirmPasswordError('Passwords do not match')
@@ -108,6 +108,7 @@ const SignUpPage = () => {
                     password,
                 }),
             })
+            setIsLoading(false)
 
             const contentType = response.headers.get("content-type");
             if (!response.ok) {
@@ -120,7 +121,7 @@ const SignUpPage = () => {
             }
 
             const data = await response.json()
-            
+
             if (data.token) {
                 // Successful registration
                 Cookies.set('jwt_token', data.token, { expires: 30 })
@@ -150,62 +151,62 @@ const SignUpPage = () => {
                     <form onSubmit={handleSubmit}>
                         <div className="input-group">
                             <label htmlFor="username">Username</label>
-                            <input 
+                            <input
                                 id="username"
-                                type="text" 
-                                placeholder="Enter your username" 
-                                value={username} 
-                                onChange={handleNameChange} 
+                                type="text"
+                                placeholder="Enter your username"
+                                value={username}
+                                onChange={handleNameChange}
                                 className={usernameError ? 'input-error' : ''}
-                                required 
+                                required
                             />
                             {usernameError && <p className="error-message">{usernameError}</p>}
                         </div>
 
                         <div className="input-group">
                             <label htmlFor="email">Email Address</label>
-                            <input 
+                            <input
                                 id="email"
-                                type="email" 
-                                placeholder="Enter your email" 
-                                value={email} 
-                                onChange={handleEmailChange} 
+                                type="email"
+                                placeholder="Enter your email"
+                                value={email}
+                                onChange={handleEmailChange}
                                 className={emailError ? 'input-error' : ''}
-                                required 
+                                required
                             />
                             {emailError && <p className="error-message">{emailError}</p>}
                         </div>
 
                         <div className="input-group">
                             <label htmlFor="password">Password</label>
-                            <input 
+                            <input
                                 id="password"
-                                type="password" 
-                                placeholder="Create a password" 
-                                value={password} 
-                                onChange={handlePasswordChange} 
+                                type="password"
+                                placeholder="Create a password"
+                                value={password}
+                                onChange={handlePasswordChange}
                                 className={passwordError ? 'input-error' : ''}
-                                required 
+                                required
                             />
                             {passwordError && <p className="error-message">{passwordError}</p>}
                         </div>
 
                         <div className="input-group">
                             <label htmlFor="confirmPassword">Confirm Password</label>
-                            <input 
+                            <input
                                 id="confirmPassword"
-                                type="password" 
-                                placeholder="Confirm your password" 
-                                value={confirmPassword} 
-                                onChange={handleConfirmPasswordChange} 
+                                type="password"
+                                placeholder="Confirm your password"
+                                value={confirmPassword}
+                                onChange={handleConfirmPasswordChange}
                                 className={confirmPasswordError ? 'input-error' : ''}
-                                required 
+                                required
                             />
                             {confirmPasswordError && <p className="error-message">{confirmPasswordError}</p>}
                         </div>
 
-                        <button 
-                            type="submit" 
+                        <button
+                            type="submit"
                             className={`sign-up-button ${isLoading ? 'loading' : ''}`}
                             disabled={isLoading}
                         >
@@ -221,4 +222,4 @@ const SignUpPage = () => {
     )
 }
 
-export default SignUpPage
+export default SignUpPage
