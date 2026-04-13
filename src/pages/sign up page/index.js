@@ -16,38 +16,53 @@ const SignUpPage = () => {
 
     const handleNameChange = (e) => {
         setUsername(e.target.value)
+        if (username === '') {
+            setUsernameError('username is required')
+        }
+        else {
+            setUsernameError('')
+        }
     }
 
     const handleEmailChange = (e) => {
         setEmail(e.target.value)
+        if (email === '') {
+            setEmailError('Email is required')
+        }
+        else {
+            setEmailError('')
+        }
     }
 
     const handlePasswordChange = (e) => {
         setPassword(e.target.value)
+        if (password === '') {
+            setPasswordError('Password is required')
+        }
+        else {
+            setPasswordError('')
+        }
     }
 
     const handleConfirmPasswordChange = (e) => {
         setConfirmPassword(e.target.value)
+        if (confirmPassword === '') {
+            setConfirmPasswordError('Confirm Password is required')
+        }
+        else {
+            setConfirmPasswordError('')
+        }
+        if (password !== confirmPassword) {
+            setConfirmPasswordError('Passwords do not match')
+        }
+        else {
+            setConfirmPasswordError('')
+        }
     }
 
     const handleSubmit = async (e) => {
         try {
             e.preventDefault()
-            if (username === '') {
-                setUsernameError('username is required')
-            }
-            if (email === '') {
-                setEmailError('Email is required')
-            }
-            if (password === '') {
-                setPasswordError('Password is required')
-            }
-            if (confirmPassword === '') {
-                setConfirmPasswordError('Confirm Password is required')
-            }
-            if (password !== confirmPassword) {
-                setConfirmPasswordError('Passwords do not match')
-            }
             if (username !== '' && email !== '' && password !== '' && confirmPassword !== '' && password === confirmPassword) {
                 const response = await fetch('https://shipkart-updated-backend-1.onrender.com/register', {
                     method: 'POST',
