@@ -1,9 +1,14 @@
 import './index.css'
 import { useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useContext } from 'react'
+import { jwtTokenContext } from '../../context/jwtTokenContext'
+import { jwtDecode } from 'jwt-decode'
 
 const BookingPage = () => {
     const navigate = useNavigate()
+    const { jwtToken } = useContext(jwtTokenContext)
+    const decodedToken = jwtDecode(jwtToken)
+    const username = decodedToken.user_id
     const [pickupDetails, setPickupDetails] = useState({
         pickupAddress: '',
         pickupPincode: '',
@@ -121,7 +126,7 @@ const BookingPage = () => {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    user_id: "64bd9e69-c4d6-43ff-a4fc-fd13d27a79b3",
+                    user_id: user_id,
                     pickup_address: pickupDetails.pickupAddress,
                     pickup_pincode: pickupDetails.pickupPincode,
                     pickup_landmark: pickupDetails.landmark,
