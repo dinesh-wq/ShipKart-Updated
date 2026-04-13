@@ -1,14 +1,26 @@
 import './index.css'
 import { useNavigate } from 'react-router-dom'
-import { useState, useContext } from 'react'
-import { jwtTokenContext } from '../../context/jwtTokenContext'
+import { useState, useContext, useMemo } from 'react'
+import { JwtTokenContext } from '../../App'
 import { jwtDecode } from 'jwt-decode'
 
 const BookingPage = () => {
     const navigate = useNavigate()
-    const { jwtToken } = useContext(jwtTokenContext)
-    const decodedToken = jwtDecode(jwtToken)
-    const username = decodedToken.user_id
+    const { jwtToken } = useContext(JwtTokenContext)
+    
+    // Safely decode token and memoize the result
+    const decodedToken = useMemo(() => {
+        if (!jwtToken) return null
+        try {
+            return jwtDecode(jwtToken)
+        } catch (error) {
+            console.error('Invalid token:', error)
+            return null
+        }
+    }, [jwtToken])
+
+    const user_id = decodedToken?.user_id || decodedToken?.id || ''
+
     const [pickupDetails, setPickupDetails] = useState({
         pickupAddress: '',
         pickupPincode: '',
@@ -46,80 +58,71 @@ const BookingPage = () => {
         itemConditionError: ''
     })
 
+    const [isLoading, setIsLoading] = useState(false)
+
     const updatePickupDetails = (e) => {
         const { name, value } = e.target
-        const err = e.target.getAttribute('data-err')
-        setPickupDetails(prevDetails => ({
-            ...prevDetails,
-            [name]: value
-        }))
-        if (value === "") {
-            setPickupDetailsErrors(prevErrors => ({
-                ...prevErrors,
-                [err]: `${name} is required`
-            }))
+        const errKey = `${name}Error`
+        
+        setPickupDetails(prev => ({ ...prev, [name]: value }))
+        
+        if (value.trim() === "") {
+            setPickupDetailsErrors(prev => ({ ...prev, [errKey]: `${name} is required` }))
         } else {
-            setPickupDetailsErrors(prevErrors => ({
-                ...prevErrors,
-                [err]: ''
-            }))
+            setPickupDetailsErrors(prev => ({ ...prev, [errKey]: '' }))
         }
     }
 
     const updateDeliveryDetails = (e) => {
         const { name, value } = e.target
-        const err = e.target.getAttribute('data-err')
-        setDeliveryDetails(prevDetails => ({
-            ...prevDetails,
-            [name]: value
-        }))
-        if (value === "") {
-            setDeliveryDetailsErrors(prevErrors => ({
-                ...prevErrors,
-                [err]: `${name} is required`
-            }))
+        const errKey = `${name}Error`
+        
+        setDeliveryDetails(prev => ({ ...prev, [name]: value }))
+        
+        if (value.trim() === "") {
+            setDeliveryDetailsErrors(prev => ({ ...prev, [errKey]: `${name} is required` }))
         } else {
-            setDeliveryDetailsErrors(prevErrors => ({
-                ...prevErrors,
-                [err]: ''
-            }))
+            setDeliveryDetailsErrors(prev => ({ ...prev, [errKey]: '' }))
         }
     }
 
     const updateItemDetails = (e) => {
         const { name, value } = e.target
-        const err = e.target.getAttribute('data-err')
-        setItemDetails(prevDetails => ({
-            ...prevDetails,
-            [name]: value
-        }))
-        if (value === "") {
-            setItemDetailsErrors(prevErrors => ({
-                ...prevErrors,
-                [err]: `${name} is required`
-            }))
+        const errKey = `${name}Error`
+        
+        setItemDetails(prev => ({ ...prev, [name]: value }))
+        
+        if (value.trim() === "") {
+            setItemDetailsErrors(prev => ({ ...prev, [errKey]: `${name} is required` }))
         } else {
-            setItemDetailsErrors(prevErrors => ({
-                ...prevErrors,
-                [err]: ''
-            }))
+            setItemDetailsErrors(prev => ({ ...prev, [errKey]: '' }))
         }
+    }
+
+    const validateForm = () => {
+        const pValues = Object.values(pickupDetails)
+        const dValues = Object.values(deliveryDetails)
+        const iValues = Object.values(itemDetails)
+        
+        if (pValues.some(v => v === '') || dValues.some(v => v === '') || iValues.some(v => v === '')) {
+            alert("Please fill all the details")
+            return false
+        }
+        return true
     }
 
     const scheduleDelivery = async (e) => {
         e.preventDefault()
-        const { pickupAddress, pickupPincode, landmark: pickupLandmark, pickupDateTime, phoneNumber } = pickupDetails
-        const { deliveryAddress, deliveryPincode, landmark: deliveryLandmark, receiverPhoneNumber } = deliveryDetails
-        const { itemName, itemWeight, itemCondition } = itemDetails
-
-        if (pickupAddress === "" || pickupPincode === "" || pickupLandmark === "" || pickupDateTime === "" || phoneNumber === "" ||
-            deliveryAddress === "" || deliveryPincode === "" || deliveryLandmark === "" || receiverPhoneNumber === "" ||
-            itemName === "" || itemWeight === "" || itemCondition === "") {
-            alert("Please fill all the details")
+        
+        if (!validateForm()) return
+        if (!user_id) {
+            alert("Session expired. Please login again.")
+            navigate('/')
             return
         }
 
         try {
+            setIsLoading(true)
             const response = await fetch('https://shipkart-updated-backend-1.onrender.com/orders', {
                 method: 'POST',
                 headers: {
@@ -146,54 +149,28 @@ const BookingPage = () => {
             })
 
             const contentType = response.headers.get("content-type");
-            if (!response.ok || !contentType || !contentType.includes("application/json")) {
-                const errorText = await response.text();
-                console.error('Server error response:', errorText);
-                throw new Error(`Server returned ${response.status}. Expected JSON but got ${contentType || 'unknown'}.`);
+            if (!response.ok) {
+                const errorBody = contentType?.includes("application/json") ? await response.json() : await response.text();
+                throw new Error(errorBody.message || `Server returned ${response.status}`);
             }
 
-            const data = await response.json()
-            console.log(data)
             alert("Order Scheduled Successfully")
-            setPickupDetails({
-                pickupAddress: '',
-                pickupPincode: '',
-                landmark: '',
-                pickupDateTime: '',
-                phoneNumber: ''
-            })
-            setDeliveryDetails({
-                deliveryAddress: '',
-                deliveryPincode: '',
-                landmark: '',
-                receiverPhoneNumber: ''
-            })
-            setItemDetails({
-                itemName: '',
-                itemWeight: '',
-                itemCondition: ''
-            })
-            setPickupDetailsErrors({
-                pickupAddressError: '',
-                pickupPincodeError: '',
-                landmarkError: '',
-                pickupDateTimeError: '',
-                phoneNumberError: ''
-            })
-            setDeliveryDetailsErrors({
-                deliveryAddressError: '',
-                deliveryPincodeError: '',
-                landmarkError: '',
-                receiverPhoneNumberError: ''
-            })
-            setItemDetailsErrors({
-                itemNameError: '',
-                itemWeightError: '',
-                itemConditionError: ''
-            })
+            
+            // Reset states
+            setPickupDetails({ pickupAddress: '', pickupPincode: '', landmark: '', pickupDateTime: '', phoneNumber: '' })
+            setDeliveryDetails({ deliveryAddress: '', deliveryPincode: '', landmark: '', receiverPhoneNumber: '' })
+            setItemDetails({ itemName: '', itemWeight: '', itemCondition: '' })
+            
+            setPickupDetailsErrors({ pickupAddressError: '', pickupPincodeError: '', landmarkError: '', pickupDateTimeError: '', phoneNumberError: '' })
+            setDeliveryDetailsErrors({ deliveryAddressError: '', deliveryPincodeError: '', landmarkError: '', receiverPhoneNumberError: '' })
+            setItemDetailsErrors({ itemNameError: '', itemWeightError: '', itemConditionError: '' })
+            
+            navigate('/')
         } catch (error) {
-            console.log(`Error in scheduleDelivery: ${error.message}`)
-            alert("Something went wrong. Please try again.")
+            console.error(`Error in scheduleDelivery:`, error)
+            alert(`Booking Error: ${error.message}`)
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -205,54 +182,70 @@ const BookingPage = () => {
                     <h1 className="booking-page-heading">Booking Page</h1>
                     <button className="back-button" onClick={() => navigate('/')}>Back</button>
                 </div>
-                <div className="booking-page-forms-container">
+                
+                <form className="booking-page-forms-container" onSubmit={scheduleDelivery}>
                     <div className="booking-page-form-container">
                         <h2 className="booking-page-form-heading">Pickup Details</h2>
-                        <form className="booking-page-form">
-                            <input type="text" placeholder="Pickup Address" className="booking-page-form-input" name='pickupAddress' value={pickupDetails.pickupAddress} data-err="pickupAddressError" onChange={updatePickupDetails} required />
+                        <div className="booking-page-form">
+                            <input type="text" placeholder="Pickup Address" className="booking-page-form-input" name='pickupAddress' value={pickupDetails.pickupAddress} onChange={updatePickupDetails} required />
                             <p className="booking-page-error-message">{pickupDetailsErrors.pickupAddressError}</p>
-                            <input type="text" maxLength={6} pattern='[0-9]{6}' placeholder="Pickup Pincode" name="pickupPincode" value={pickupDetails.pickupPincode} data-err="pickupPincodeError" className="booking-page-form-input" onChange={updatePickupDetails} required />
+                            
+                            <input type="text" maxLength={6} pattern='[0-9]{6}' placeholder="Pickup Pincode" name="pickupPincode" value={pickupDetails.pickupPincode} className="booking-page-form-input" onChange={updatePickupDetails} required />
                             <p className="booking-page-error-message">{pickupDetailsErrors.pickupPincodeError}</p>
-                            <input type="text" placeholder="Landmark" className="booking-page-form-input" name="landmark" value={pickupDetails.landmark} data-err="landmarkError" onChange={updatePickupDetails} required />
+                            
+                            <input type="text" placeholder="Landmark" className="booking-page-form-input" name="landmark" value={pickupDetails.landmark} onChange={updatePickupDetails} required />
                             <p className="booking-page-error-message">{pickupDetailsErrors.landmarkError}</p>
-                            <input type="datetime-local" placeholder="Pickup Date&Time" className="booking-page-form-input" name="pickupDateTime" value={pickupDetails.pickupDateTime} data-err="pickupDateTimeError" onChange={updatePickupDetails} required />
+                            
+                            <input type="datetime-local" placeholder="Pickup Date-Time" className="booking-page-form-input" name="pickupDateTime" value={pickupDetails.pickupDateTime} onChange={updatePickupDetails} required />
                             <p className="booking-page-error-message">{pickupDetailsErrors.pickupDateTimeError}</p>
-                            <input type="text" maxLength={10} pattern='[0-9]{10}' placeholder="Phone Number" className="booking-page-form-input" name="phoneNumber" value={pickupDetails.phoneNumber} data-err="phoneNumberError" onChange={updatePickupDetails} required />
+                            
+                            <input type="text" maxLength={10} pattern='[0-9]{10}' placeholder="Phone Number" className="booking-page-form-input" name="phoneNumber" value={pickupDetails.phoneNumber} onChange={updatePickupDetails} required />
                             <p className="booking-page-error-message">{pickupDetailsErrors.phoneNumberError}</p>
-                        </form>
+                        </div>
                     </div>
+                    
                     <div className="delivery-schedule-container">
                         <div className="delivery-schedule-forms-container">
-                            <form className="booking-page-form">
-                                <input type="text" placeholder="Delivery Address" name="deliveryAddress" value={deliveryDetails.deliveryAddress} data-err="deliveryAddressError" className="booking-page-form-input" onChange={updateDeliveryDetails} required />
+                            <div className="booking-page-form">
+                                <h2 className="booking-page-form-heading">Delivery Details</h2>
+                                <input type="text" placeholder="Delivery Address" name="deliveryAddress" value={deliveryDetails.deliveryAddress} className="booking-page-form-input" onChange={updateDeliveryDetails} required />
                                 <p className="booking-page-error-message">{deliveryDetailsErrors.deliveryAddressError}</p>
-                                <input type="text" minLength={6} maxLength={6} placeholder="Delivery Pincode" name="deliveryPincode" value={deliveryDetails.deliveryPincode} data-err="deliveryPincodeError" className="booking-page-form-input" onChange={updateDeliveryDetails} required />
+                                
+                                <input type="text" minLength={6} maxLength={6} placeholder="Delivery Pincode" name="deliveryPincode" value={deliveryDetails.deliveryPincode} className="booking-page-form-input" onChange={updateDeliveryDetails} required />
                                 <p className="booking-page-error-message">{deliveryDetailsErrors.deliveryPincodeError}</p>
-                                <input type="text" placeholder="Landmark" name="landmark" value={deliveryDetails.landmark} data-err="landmarkError" className="booking-page-form-input" onChange={updateDeliveryDetails} required />
+                                
+                                <input type="text" placeholder="Landmark" name="landmark" value={deliveryDetails.landmark} className="booking-page-form-input" onChange={updateDeliveryDetails} required />
                                 <p className="booking-page-error-message">{deliveryDetailsErrors.landmarkError}</p>
-                                <input type="text" minLength={10} maxLength={10} placeholder="Receiver's Phone Number" name="receiverPhoneNumber" value={deliveryDetails.receiverPhoneNumber} data-err="receiverPhoneNumberError" className="booking-page-form-input" onChange={updateDeliveryDetails} required />
+                                
+                                <input type="text" minLength={10} maxLength={10} placeholder="Receiver Phone" name="receiverPhoneNumber" value={deliveryDetails.receiverPhoneNumber} className="booking-page-form-input" onChange={updateDeliveryDetails} required />
                                 <p className="booking-page-error-message">{deliveryDetailsErrors.receiverPhoneNumberError}</p>
-                            </form>
-                            <form className="booking-page-form">
-                                <input type="text" placeholder="Item Name" name="itemName" value={itemDetails.itemName} data-err="itemNameError" className="booking-page-form-input" onChange={updateItemDetails} required />
+                            </div>
+                            
+                            <div className="booking-page-form">
+                                <h2 className="booking-page-form-heading">Item Details</h2>
+                                <input type="text" placeholder="Item Name" name="itemName" value={itemDetails.itemName} className="booking-page-form-input" onChange={updateItemDetails} required />
                                 <p className="booking-page-error-message">{itemDetailsErrors.itemNameError}</p>
-                                <input type="number" minLength={1} maxLength={3} placeholder="Item Weight" name="itemWeight" value={itemDetails.itemWeight} data-err="itemWeightError" className="booking-page-form-input" onChange={updateItemDetails} required />
+                                
+                                <input type="number" placeholder="Weight (kg)" name="itemWeight" value={itemDetails.itemWeight} className="booking-page-form-input" onChange={updateItemDetails} required />
                                 <p className="booking-page-error-message">{itemDetailsErrors.itemWeightError}</p>
-                                <select name="itemCondition" value={itemDetails.itemCondition} data-err="itemConditionError" className="booking-page-form-input" onChange={updateItemDetails} required>
-                                    <option value="">Select Item Condition</option>
+                                
+                                <select name="itemCondition" value={itemDetails.itemCondition} className="booking-page-form-input" onChange={updateItemDetails} required>
+                                    <option value="">Select Condition</option>
                                     <option value="good">Good</option>
                                     <option value="moderate">Moderate</option>
                                     <option value="poor">Poor</option>
                                 </select>
                                 <p className="booking-page-error-message">{itemDetailsErrors.itemConditionError}</p>
-                            </form>
+                            </div>
                         </div>
-                        <button className="schedule-button" onClick={scheduleDelivery}>Schedule Delivery</button>
+                        <button type="submit" className="schedule-button" disabled={isLoading}>
+                            {isLoading ? 'Scheduling...' : 'Schedule Delivery'}
+                        </button>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     )
 }
 
-export default BookingPage
+export default BookingPage
