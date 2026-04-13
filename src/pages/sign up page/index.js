@@ -48,38 +48,40 @@ const SignUpPage = () => {
             if (password !== confirmPassword) {
                 setConfirmPasswordError('Passwords do not match')
             }
-            const response = await fetch('https://shipkart-updated-backend-1.onrender.com/register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    username: username,
-                    email: email,
-                    password: password,
-                }),
-            })
+            if (username !== '' && email !== '' && password !== '' && confirmPassword !== '' && password === confirmPassword) {
+                const response = await fetch('https://shipkart-updated-backend-1.onrender.com/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        email: email,
+                        password: password,
+                    }),
+                })
 
-            const contentType = response.headers.get("content-type");
-            if (!response.ok || !contentType || !contentType.includes("application/json")) {
-                const errorText = await response.text();
-                console.error('Server error response:', errorText);
-                throw new Error(`Server returned ${response.status} ${response.statusText}${!contentType?.includes("application/json") ? '. Expected JSON but got HTML/Text. Please check if the backend URL and endpoint are correct.' : ''}`);
-            }
+                const contentType = response.headers.get("content-type");
+                if (!response.ok || !contentType || !contentType.includes("application/json")) {
+                    const errorText = await response.text();
+                    console.error('Server error response:', errorText);
+                    throw new Error(`Server returned ${response.status} ${response.statusText}${!contentType?.includes("application/json") ? '. Expected JSON but got HTML/Text. Please check if the backend URL and endpoint are correct.' : ''}`);
+                }
 
-            const data = await response.json()
-            console.log(data)
+                const data = await response.json()
+                console.log(data)
 
-            if (data.message === 'User Registered Successfully') {
-                setUsername('')
-                setEmail('')
-                setPassword('')
-                setConfirmPassword('')
-                setJwtToken(data.token)
-                alert(data.message)
-            }
-            else {
-                alert(data.message || 'Registration failed')
+                if (data.message === 'User Registered Successfully') {
+                    setUsername('')
+                    setEmail('')
+                    setPassword('')
+                    setConfirmPassword('')
+                    setJwtToken(data.token)
+                    alert(data.message)
+                }
+                else {
+                    alert(data.message || 'Registration failed')
+                }
             }
         } catch (error) {
             console.error('SignUp Error:', error)
