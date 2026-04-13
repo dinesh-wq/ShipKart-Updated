@@ -69,7 +69,7 @@ const SignUpPage = () => {
 
             const data = await response.json()
             console.log(data)
-            
+
             if (data.message === 'User Registered Successfully') {
                 setUsername('')
                 setEmail('')
