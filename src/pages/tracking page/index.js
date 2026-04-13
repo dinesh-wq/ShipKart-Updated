@@ -16,7 +16,7 @@ const TrackingPage = () => {
     useEffect(() => {
         const getPackagesDetails = async () => {
             try {
-                const response = await fetch(`https://shipkart-updated-backend-1.onrender.com/orders/${user_id}`, {
+                const response = await fetch(`https://shipkart-updated-backend-1.onrender.com/users/${user_id}/orders`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json'
