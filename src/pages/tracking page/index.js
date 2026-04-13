@@ -38,7 +38,7 @@ const TrackingPage = () => {
         }
 
         getPackagesDetails()
-    }, [])
+    }, [user_id])
 
     return (
         <div className='tracking-page-container'>
