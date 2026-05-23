@@ -6,7 +6,7 @@ const DeliveryAgentPage = () => {
     const [orders, setOrders] = useState([])
     useEffect(() => {
         const fetchOrders = async () => {
-            const response = await fetch('https://shipkart-updated-backend-production.up.railway.app/orders/')
+            const response = await fetch('https://shipkart-updated-backend-production.up.railway.app/orders')
             const data = await response.json()
             setOrders(data)
         }
