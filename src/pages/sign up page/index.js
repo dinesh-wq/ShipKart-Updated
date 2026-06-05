@@ -97,7 +97,7 @@ const SignUpPage = () => {
 
         try {
             setIsLoading(true)
-            const response = await fetch('https://shipkart-updated-backend-1.onrender.com/register', {
+            const response = await fetch('https://shipkart-updated-backend-production.up.railway.app/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

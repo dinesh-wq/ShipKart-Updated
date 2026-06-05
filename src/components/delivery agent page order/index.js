@@ -16,7 +16,7 @@ const DeliveryAgentOrder = (props) => {
     useEffect(() => {
         const fetchUserName = async () => {
             try {
-                const response = await fetch(`https://shipkart-updated-backend-1.onrender.com/users/${user_id}`)
+                const response = await fetch(`https://shipkart-updated-backend-production.up.railway.app/users/${user_id}`)
                 const data = await response.json()
                 setName(data.name || 'Unknown')
             } catch (error) {
@@ -28,7 +28,7 @@ const DeliveryAgentOrder = (props) => {
     }, [user_id])
 
     const updateDeliveryStatus = async () => {
-        const url = `https://shipkart-updated-backend-1.onrender.com/orders/${order_id}`
+        const url = `https://shipkart-updated-backend-production.up.railway.app/orders/${order_id}`
         const options = {
             method: 'PUT',
             headers: {

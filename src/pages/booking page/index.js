@@ -123,7 +123,7 @@ const BookingPage = () => {
 
         try {
             setIsLoading(true)
-            const response = await fetch('https://shipkart-updated-backend-1.onrender.com/orders', {
+            const response = await fetch('https://shipkart-updated-backend-production.up.railway.app/orders', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
