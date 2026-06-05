@@ -1,0 +1,117 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+.delivery-agent-page-main-container {
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    padding: 2rem;
+    background: #ffffff;
+    color: #1e293b;
+}
+
+.delivery-agent-header {
+    margin-bottom: 2.5rem;
+    text-align: center;
+}
+
+.delivery-agent-header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #4f46e5;
+    letter-spacing: -0.025em;
+    margin: 0;
+}
+
+.orders-status-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: center;
+    margin-bottom: 3rem;
+}
+
+.total-orders-status,
+.orders-not-collected-status,
+.on-the-way-status,
+.out-for-delivery-status {
+    flex: 1 1 calc(25% - 1.5rem);
+    min-width: 200px;
+    max-width: 300px;
+    text-align: center;
+    background: #ffffff;
+    padding: 1.5rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.total-orders-status:hover,
+.orders-not-collected-status:hover,
+.on-the-way-status:hover,
+.out-for-delivery-status:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+.total-orders-status h1,
+.orders-not-collected-status h1,
+.on-the-way-status h1,
+.out-for-delivery-status h1 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #64748b;
+    margin-bottom: 0.5rem;
+}
+
+.total-orders-status p,
+.orders-not-collected-status p,
+.on-the-way-status p,
+.out-for-delivery-status p {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #4f46e5;
+    margin: 0;
+}
+
+.orders-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+    .delivery-agent-page-main-container {
+        padding: 1.5rem;
+    }
+
+    .delivery-agent-header h1 {
+        font-size: 2rem;
+    }
+
+    .orders-status-container {
+        gap: 1rem;
+    }
+
+    .total-orders-status,
+    .orders-not-collected-status,
+    .on-the-way-status,
+    .out-for-delivery-status {
+        flex: 1 1 calc(50% - 1rem);
+    }
+}
+
+@media (max-width: 480px) {
+
+    .total-orders-status,
+    .orders-not-collected-status,
+    .on-the-way-status,
+    .out-for-delivery-status {
+        flex: 1 1 100%;
+    }
+
+    .orders-container {
+        grid-template-columns: 1fr;
+    }
+}
